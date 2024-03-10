@@ -13,9 +13,9 @@ export default function Home() {
   let [pageNumber, updatePageNumber] = useState(1);
   let [fetchedData, updateFetchedData] = useState([]);
   let { info, results } = fetchedData;
-  let fetchUrl = `https://rickandmortyapi.com/api/character/?page=${pageNumber}&name=${search}`;
+  let fetchUrl = `https://rickandmortyapi.com/api/character/?page=${pageNumber}${search && `&name=${search}`}`;
 
-  useEffect(() => {
+  useEffect(() => {    
     (async function () {
       const response = await axios.get(fetchUrl);
       updateFetchedData(response.data);
