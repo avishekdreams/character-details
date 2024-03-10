@@ -1,18 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import CharacterList from './components/CharacterList';
 import CharacterDetail from './components/CharacterDetail';
-import NavBar from "./components/NavBar";
 import Episodes from "./components/Episodes";
 import Location from "./components/Location";
+import Home from "./components/Home";
 
 function App() {
   return (
     <>
-      <div className="App">
-        <NavBar />
-      </div>
       <Routes>
-        <Route path='/' element={<CharacterList />} />
+        <Route path='/' element={<Home />} />
         <Route path="/episodes" element={<Episodes />} />
         <Route path="/episodes/:id" element={<CharacterDetail />} />
         <Route path="/location" element={<Location />} />

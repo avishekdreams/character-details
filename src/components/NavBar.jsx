@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 
 const navigation = [
@@ -6,34 +7,42 @@ const navigation = [
   { name: 'Location', href: '/location', current: false },
 ]
 
-export default function NavBar() {
+export default function NavBar({ setSearch, updatePageNumber }) {
+  const search = useRef("");
+  const handleSearch = () => {
+    updatePageNumber(1);    
+    setSearch(search.current.value);
+  }
+
   return (
-    <div className="bg-white">
-      <header className="relative bg-white">
-        <p className="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-          Rick & Morty
-        </p>
+    <header className="relative bg-white">
+      <p className="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
+        Rick & Morty
+      </p>
 
-        <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-1 items-center justify-center py-3 sm:items-stretch sm:justify-start text-black">
-
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    aria-current={item.current ? 'page' : undefined}
-                    className="hover:text-red-500 transition-colors duration-200"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </nav>
-      </header>
-    </div>
+      <nav className="mx-auto max-w-7xl bg-gray-600 p-4 flex mt-4 justify-between items-center">
+        <div className="flex items-center">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              aria-current={item.current ? 'page' : undefined}
+              className="mr-4"
+            >
+              {item.name}
+            </Link>
+          ))}
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Search"
+            className="px-4 py-2 rounded-md mr-2"
+            ref={search}
+          />
+          <button onClick={handleSearch} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Search</button>
+        </div>
+      </nav>
+    </header>
   )
 }
