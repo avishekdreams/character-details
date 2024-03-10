@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "./../contexts/userContext";
 
 const navigation = [
   { name: 'Characters', href: '/', current: true },
@@ -7,10 +8,11 @@ const navigation = [
   { name: 'Location', href: '/location', current: false },
 ]
 
-export default function NavBar({ setSearch, updatePageNumber }) {
+export default function NavBar() {
+  const { setSearch, updatePageNumber } = useContext(UserContext);
   const search = useRef("");
   const handleSearch = () => {
-    updatePageNumber(1);    
+    updatePageNumber(1);
     setSearch(search.current.value);
   }
 

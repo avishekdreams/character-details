@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Pagination from "./Pagination";
 import CharacterList from "./CharacterList";
-import NavBar from "./NavBar";
+import { UserContext } from "./../contexts/userContext";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const { search } = useContext(UserContext);
 
   // Pagination code...
   let [pageNumber, updatePageNumber] = useState(1);
@@ -15,11 +14,17 @@ export default function Home() {
   let { info, results } = fetchedData;
   let fetchUrl = `https://rickandmortyapi.com/api/character/?page=${pageNumber}${search && `&name=${search}`}`;
 
-  useEffect(() => {    
-    (async function () {
-      const response = await axios.get(fetchUrl);
-      updateFetchedData(response.data);
-      setLoading(false)
+  useEffect(() => {
+    (function () {
+      axios.get(fetchUrl)
+        .then((e) => {
+          updateFetchedData(e.data);
+          setLoading(false);
+        })
+        .catch(((err) => {
+          const { response: { data: { error } } } = err;
+          window.alert(error);
+        }));
     })();
   }, [fetchUrl]);
 
@@ -29,11 +34,6 @@ export default function Home() {
 
   return (
     <div className="bg-white">
-      <NavBar 
-        setSearch={setSearch} 
-        updatePageNumber={updatePageNumber}
-      />
-      
       <CharacterList data={results} />
 
       <div className="flex items-center justify-between">
