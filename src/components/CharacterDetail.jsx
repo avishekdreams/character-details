@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const CharacterDetail = () => {
+  const navigate = useNavigate();
   const [character, setCharacter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -69,6 +70,17 @@ const CharacterDetail = () => {
 
         <div className="grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 lg:gap-8">
           <img className="rounded-lg bg-gray-100" src={character.image} alt={character.name} />
+        </div>
+
+        <div className="md:flex md:items-center mb-10">
+          <div className="md:w-1/3">
+            <button
+              className="shadow bg-gray-500 hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+              type="button"
+              onClick={() => navigate(-1)}>
+              Back
+            </button>
+          </div>
         </div>
       </div>
     </div>

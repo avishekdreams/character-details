@@ -1,6 +1,8 @@
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
 import { UserContext } from "./../contexts/userContext";
+import { debounce } from '../utility/utils';
 
 const navigation = [
   { name: 'Characters', href: '/', current: true },
@@ -8,13 +10,21 @@ const navigation = [
   { name: 'Location', href: '/location', current: false },
 ]
 
-export default function NavBar() {
+NavBar.propTypes = {
+  pathname: PropTypes.string.isRequired
+};
+
+export default function NavBar({ pathname }) {
   const { setSearch, updatePageNumber } = useContext(UserContext);
-  const search = useRef("");
-  const handleSearch = () => {
+  const handleChange = debounce((value) => {
     updatePageNumber(1);
-    setSearch(search.current.value);
-  }
+    setSearch(value);
+  }, 1000);
+
+  const handleInputChange = (event) => {
+    const { value } = event.target;
+    handleChange(value);
+  };
 
   return (
     <header className="relative bg-white">
@@ -35,15 +45,17 @@ export default function NavBar() {
             </Link>
           ))}
         </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Search"
-            className="px-4 py-2 rounded-md mr-2"
-            ref={search}
-          />
-          <button onClick={handleSearch} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Search</button>
-        </div>
+        {!(pathname.startsWith('/characters') || pathname.startsWith('/episodes') || pathname.startsWith('/location')) && (
+          <div>
+            <input
+              type="text"
+              placeholder="Search"
+              className="px-4 py-2 rounded-md mr-2"
+              onChange={handleInputChange}
+            />
+          </div>
+        )}
+
       </nav>
     </header>
   )

@@ -15,18 +15,18 @@ export default function Home() {
   let fetchUrl = `https://rickandmortyapi.com/api/character/?page=${pageNumber}${search && `&name=${search}`}`;
 
   useEffect(() => {
-    (function () {
-      axios.get(fetchUrl)
-        .then((e) => {
-          updateFetchedData(e.data);
-          setLoading(false);
-        })
-        .catch(((err) => {
-          const { response: { data: { error } } } = err;
-          window.alert(error);
-        }));
-    })();
-  }, [fetchUrl]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(fetchUrl);
+        updateFetchedData(response.data);
+        setLoading(false);
+      } catch (error) {
+        window.alert(error.response.data.error);
+      }
+    };
+  
+    fetchData();
+  }, [fetchUrl, setLoading, updateFetchedData]);
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
